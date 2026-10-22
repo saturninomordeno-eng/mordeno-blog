@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Can AI Run the SOC? Why Humans Should Stay in the Cockpit</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Playfair+Display:ital,wght@0,700;1,500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ffffff;--bar:#fafafa;--ink:#141b2d;--muted:#4a5266;--line:#d9dce3;--link:#1d4ed8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10131c;--bar:#161a25;--ink:#eef0f5;--muted:#a9b0c2;--line:#2a3042;--link:#8fb0ff}}
+:root[data-theme="dark"]{--bg:#10131c;--bar:#161a25;--ink:#eef0f5;--muted:#a9b0c2;--line:#2a3042;--link:#8fb0ff}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;font-size:17px;line-height:1.75}
+header{background:var(--bar);border-bottom:1px solid var(--line);text-align:center;padding:18px 16px}
+header span{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:28px;letter-spacing:.02em}
+main{max-width:640px;margin:0 auto;padding:48px 20px 80px}
+h1{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:clamp(34px,6vw,52px);line-height:1.12;margin:0 0 28px}
+.meta{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 0;margin-bottom:36px;color:var(--muted);font-size:15px}
+.lede{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:500;font-size:22px;line-height:1.55}
+h2{font-family:"Playfair Display",Georgia,serif;font-size:26px;line-height:1.25;margin:44px 0 12px}
+p{margin:0 0 20px}
+ul,ol{padding-left:22px;margin:0 0 20px}
+li{margin-bottom:10px}
+.ph{background:rgba(250,204,21,.25);border-radius:3px;padding:0 3px}
+.refs p{padding-left:32px;text-indent:-32px;font-size:15px;line-height:1.6;overflow-wrap:anywhere}
+a{color:var(--link)}
+</style>
+</head>
+<body>
+<header><span>BLOG</span></header>
+<main>
+<article>
+<h1>Can AI Run the SOC? Why Humans Should Stay in the Cockpit</h1>
+<div class="meta">AI in Security &nbsp;•&nbsp; Reflection</div>
+
+<p class="lede">The IBM article imagines security analysts as airline pilots who let machines handle the routine flying. I think the idea is partly realistic, but it’s only responsible if humans keep real control.</p>
+
+<p>When I read the IBM article by John Velisaris (2025), the airline comparison stayed with me. He says security operations should change the way commercial aviation did in the mid-20th century: machines fly the plane, and pilots step in only in limited situations. In his picture, the people working in a security operations center (SOC) become “SOC pilots.” They choose when to get involved while the machines handle the standard work.</p>
+<p>It’s an exciting idea, and it made me a little nervous too. A plane has a known set of controls and strict rules. A company network is messy, and nobody has a perfect picture of everything in it. So I want to ask two simple questions in this post. Is the SOC pilot model realistic? And is it responsible?</p>
+<p>My short answer is that it’s realistic for routine work, and it’s responsible only if humans keep real control over the decisions that matter.</p>
+
+<h2>Where AI can safely act on its own</h2>
+<p>Some security work is boring and repetitive. Sorting real alerts from background noise, collecting details about an alert, and closing obvious false alarms are good examples. Velisaris (2025) explains that automation already works well in closed systems, like endpoint detection and response (EDR) tools, because the software knows every variable involved. When a system knows everything it needs, it can act safely.</p>
+<p>A simple rule helps me think about this. The NIST AI Risk Management Framework describes risk as a mix of how likely something is to happen and how serious the consequences would be (National Institute of Standards and Technology [NIST], 2023). If a mistake is unlikely, small, and easy to undo, AI can act alone. Quarantining an ordinary laptop that is clearly running known malware is a good example. If the laptop turns out to be fine, someone can release it in a few minutes.</p>
+<p>So I would let an AI agent work alone when:</p>
+<ul>
+<li>the task is routine and well understood,</li>
+<li>the information it needs is complete and reliable,</li>
+<li>a mistake would be small, and</li>
+<li>the action can be undone.</li>
+</ul>
+
+<h2>Where humans must stay in charge</h2>
+<p>Velisaris (2025) points to zero-day vulnerabilities, which are newly found weaknesses that nobody has seen before. No one knows when or how the next one will show up. AI tools mostly learn from the past, so something truly new is exactly where they are weakest. He says human analysts take command in these moments, and I agree with him.</p>
+<p>Humans also need to stay in charge when a decision is about more than technology. Shutting down a critical server, locking out hundreds of users, or deciding whether to tell customers about a breach all involve business trade-offs, legal duties, and real people. An AI can suggest an answer, but it can’t be held accountable for it. A person has to be. This fits with the Govern function in NIST’s framework (NIST, 2023), which is about the policies and people responsible for how AI is used.</p>
+
+<h2>What happens when the asset information is wrong</h2>
+<p>This was the part of the article that stood out to me most. Velisaris (2025) says context is the key to automating security work. His example is a playbook that quarantines a computer if it isn’t a server and is running malicious activity. The playbook can’t do anything until it knows what the computer actually is, such as a critical server or an ordinary workstation.</p>
+<p>In the IBM system, an AI agent called ATOM fills that gap. When it sees that asset information is missing, it asks other agents connected to things like vulnerability management and configuration databases. In his example, it looks at the computer’s hostname and network location and decides the machine matches a normal workstation (Velisaris, 2025).</p>
+<p>That sounds smart, but think about what could go wrong. If the records are out of date, or if an important server has a name that looks like a laptop, the agent could guess wrong. It might quarantine a machine the business depends on, which causes an outage. Or it might treat a critical server like a normal workstation and respond too slowly to a real attack. Because several agents may be reading the same bad records, they can agree with each other and still all be wrong. One small mistake in the data can turn into a big mistake in the action.</p>
+<p>To me, this means the asset inventory isn’t just paperwork. It’s the ground the AI stands on. A few safeguards would help a lot:</p>
+<ul>
+<li>Keep asset records accurate and review them on a schedule.</li>
+<li>Make the agent stop and ask a person when asset information is missing, old, or conflicting.</li>
+<li>Limit what the agent may do alone to actions that can be undone.</li>
+<li>Save a clear record of why the agent made each choice, so a human can check it later.</li>
+<li>Test the system regularly with practice scenarios that include wrong data.</li>
+</ul>
+
+<h2>So, is the SOC pilot model realistic and responsible?</h2>
+<p>I think it’s realistic in parts. The article itself is careful about this. Velisaris (2025) admits it is still unknown whether AI will let SOC staff move into the pilot chair, and he says fully autonomous SOCs have not been realized yet. It’s also worth remembering that he works for IBM, which offers the ATOM system he describes. That doesn’t make him wrong, but it means I should read the excitement with a little caution.</p>
+<p>As for responsible, the airline comparison only goes so far. Pilots train constantly, planes are tested and certified, and the rules are clear. A SOC doesn’t have that same level of certainty yet. NIST (2023) also treats AI risk management as something organizations keep doing over time, not a one-time task. So I would say the model is responsible only when the humans stay informed, have the power to override the machine, and can see what it is doing.</p>
+
+<h2>How I would become a SOC pilot instead of being replaced</h2>
+<p>If this future arrives, the people who do well will be the ones who work with the AI instead of just watching it. These are the skills I would want to build:</p>
+<ul>
+<li><strong>Strong basics.</strong> I need to understand how networks and attacks work, or I won’t notice when the AI is wrong.</li>
+<li><strong>Business context.</strong> Knowing which systems matter most to an organization is exactly the context the AI struggles to get.</li>
+<li><strong>Good judgment under pressure.</strong> Zero-days and tough calls will land on my desk.</li>
+<li><strong>Healthy doubt.</strong> I should check the AI’s reasoning instead of trusting it because it sounds confident.</li>
+<li><strong>Clear communication.</strong> Someone has to explain decisions to managers and customers in plain language.</li>
+<li><strong>Hands-on practice.</strong> Pilots still practice flying by hand, and I would keep my investigation skills sharp so they don’t fade.</li>
+</ul>
+
+<h2>Final thoughts</h2>
+<p>The SOC pilot idea is a good goal, but the autopilot should earn trust slowly. Let AI handle the repetitive and reversible work. Keep humans in charge of new threats, high-impact decisions, and anything where the AI’s information might be wrong. A pilot who stops paying attention isn’t really a pilot, and the same would be true for a SOC analyst.</p>
+
+<h2>References</h2>
+<div class="refs">
+<p>National Institute of Standards and Technology. (2023). <em>Artificial intelligence risk management framework (AI RMF 1.0)</em> (NIST AI 100-1). <a href="https://doi.org/10.6028/NIST.AI.100-1">https://doi.org/10.6028/NIST.AI.100-1</a></p>
+<p>Velisaris, J. (2025, May 8). <em>How agentic AI enables an autonomous SOC with minimal human involvement</em>. IBM. <a href="https://www.ibm.com/think/insights/agentic-ai-enables-autonomous-soc">https://www.ibm.com/think/insights/agentic-ai-enables-autonomous-soc</a></p>
+</div>
+<p style="margin-top:36px;font-size:15px"><a href="index.html">Read my other post: Revisiting Our Risk Assessment Form</a></p>
+</article>
+</main>
+</body>
+</html>
